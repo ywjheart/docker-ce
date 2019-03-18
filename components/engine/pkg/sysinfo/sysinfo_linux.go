@@ -75,34 +75,64 @@ func checkCgroupMem(cgMounts map[string]string, quiet bool) cgroupMemInfo {
 		return cgroupMemInfo{}
 	}
 
-	swapLimit := cgroupEnabled(mountPoint, "memory.memsw.limit_in_bytes")
-	if !quiet && !swapLimit {
-		logrus.Warn("Your kernel does not support swap memory limit")
-	}
-	memoryReservation := cgroupEnabled(mountPoint, "memory.soft_limit_in_bytes")
-	if !quiet && !memoryReservation {
-		logrus.Warn("Your kernel does not support memory reservation")
-	}
-	oomKillDisable := cgroupEnabled(mountPoint, "memory.oom_control")
-	if !quiet && !oomKillDisable {
-		logrus.Warn("Your kernel does not support oom control")
-	}
-	memorySwappiness := cgroupEnabled(mountPoint, "memory.swappiness")
-	if !quiet && !memorySwappiness {
-		logrus.Warn("Your kernel does not support memory swappiness")
-	}
-	kernelMemory := cgroupEnabled(mountPoint, "memory.kmem.limit_in_bytes")
-	if !quiet && !kernelMemory {
-		logrus.Warn("Your kernel does not support kernel memory limit")
-	}
-
-	return cgroupMemInfo{
-		MemoryLimit:       true,
-		SwapLimit:         swapLimit,
-		MemoryReservation: memoryReservation,
-		OomKillDisable:    oomKillDisable,
-		MemorySwappiness:  memorySwappiness,
-		KernelMemory:      kernelMemory,
+	if cgroups.CgroupVersion.Memory.Version==1 {
+		swapLimit := cgroupEnabled(mountPoint, "memory.memsw.limit_in_bytes")
+		if !quiet && !swapLimit {
+			logrus.Warn("Your kernel does not support swap memory limit")
+		}
+		memoryReservation := cgroupEnabled(mountPoint, "memory.soft_limit_in_bytes")
+		if !quiet && !memoryReservation {
+			logrus.Warn("Your kernel does not support memory reservation")
+		}
+		oomKillDisable := cgroupEnabled(mountPoint, "memory.oom_control")
+		if !quiet && !oomKillDisable {
+			logrus.Warn("Your kernel does not support oom control")
+		}
+		memorySwappiness := cgroupEnabled(mountPoint, "memory.swappiness")
+		if !quiet && !memorySwappiness {
+			logrus.Warn("Your kernel does not support memory swappiness")
+		}
+		kernelMemory := cgroupEnabled(mountPoint, "memory.kmem.limit_in_bytes")
+		if !quiet && !kernelMemory {
+			logrus.Warn("Your kernel does not support kernel memory limit")
+		}
+		return cgroupMemInfo{
+			MemoryLimit:       true,
+			SwapLimit:         swapLimit,
+			MemoryReservation: memoryReservation,
+			OomKillDisable:    oomKillDisable,
+			MemorySwappiness:  memorySwappiness,
+			KernelMemory:      kernelMemory,
+		}
+	} else {
+		swapLimit := true // no longer use
+		if !quiet && !swapLimit {
+			logrus.Warn("Your kernel does not support swap memory limit")
+		}
+		memoryReservation := true // use cgroup.high
+		if !quiet && !memoryReservation {
+			logrus.Warn("Your kernel does not support memory reservation")
+		}
+		oomKillDisable := true // no longer use standalone toggle, memory.max auto trigger oom killer
+		if !quiet && !oomKillDisable {
+			logrus.Warn("Your kernel does not support oom control")
+		}
+		memorySwappiness := true // no longer use
+		if !quiet && !memorySwappiness {
+			logrus.Warn("Your kernel does not support memory swappiness")
+		}
+		kernelMemory := true // use cgroup.max
+		if !quiet && !kernelMemory {
+			logrus.Warn("Your kernel does not support kernel memory limit")
+		}
+		return cgroupMemInfo{
+			MemoryLimit:       true,
+			SwapLimit:         swapLimit,
+			MemoryReservation: memoryReservation,
+			OomKillDisable:    oomKillDisable,
+			MemorySwappiness:  memorySwappiness,
+			KernelMemory:      kernelMemory,
+		}
 	}
 }
 
@@ -160,41 +190,80 @@ func checkCgroupBlkioInfo(cgMounts map[string]string, quiet bool) cgroupBlkioInf
 		return cgroupBlkioInfo{}
 	}
 
-	weight := cgroupEnabled(mountPoint, "blkio.weight")
-	if !quiet && !weight {
-		logrus.Warn("Your kernel does not support cgroup blkio weight")
-	}
+	if cgroups.CgroupVersion.Blkio.Version==1 {
+		weight := cgroupEnabled(mountPoint, "blkio.weight")
+		if !quiet && !weight {
+			logrus.Warn("Your kernel does not support cgroup blkio weight")
+		}
 
-	weightDevice := cgroupEnabled(mountPoint, "blkio.weight_device")
-	if !quiet && !weightDevice {
-		logrus.Warn("Your kernel does not support cgroup blkio weight_device")
-	}
+		weightDevice := cgroupEnabled(mountPoint, "blkio.weight_device")
+		if !quiet && !weightDevice {
+			logrus.Warn("Your kernel does not support cgroup blkio weight_device")
+		}
 
-	readBpsDevice := cgroupEnabled(mountPoint, "blkio.throttle.read_bps_device")
-	if !quiet && !readBpsDevice {
-		logrus.Warn("Your kernel does not support cgroup blkio throttle.read_bps_device")
-	}
+		readBpsDevice := cgroupEnabled(mountPoint, "blkio.throttle.read_bps_device")
+		if !quiet && !readBpsDevice {
+			logrus.Warn("Your kernel does not support cgroup blkio throttle.read_bps_device")
+		}
 
-	writeBpsDevice := cgroupEnabled(mountPoint, "blkio.throttle.write_bps_device")
-	if !quiet && !writeBpsDevice {
-		logrus.Warn("Your kernel does not support cgroup blkio throttle.write_bps_device")
-	}
-	readIOpsDevice := cgroupEnabled(mountPoint, "blkio.throttle.read_iops_device")
-	if !quiet && !readIOpsDevice {
-		logrus.Warn("Your kernel does not support cgroup blkio throttle.read_iops_device")
-	}
+		writeBpsDevice := cgroupEnabled(mountPoint, "blkio.throttle.write_bps_device")
+		if !quiet && !writeBpsDevice {
+			logrus.Warn("Your kernel does not support cgroup blkio throttle.write_bps_device")
+		}
+		readIOpsDevice := cgroupEnabled(mountPoint, "blkio.throttle.read_iops_device")
+		if !quiet && !readIOpsDevice {
+			logrus.Warn("Your kernel does not support cgroup blkio throttle.read_iops_device")
+		}
 
-	writeIOpsDevice := cgroupEnabled(mountPoint, "blkio.throttle.write_iops_device")
-	if !quiet && !writeIOpsDevice {
-		logrus.Warn("Your kernel does not support cgroup blkio throttle.write_iops_device")
-	}
-	return cgroupBlkioInfo{
-		BlkioWeight:          weight,
-		BlkioWeightDevice:    weightDevice,
-		BlkioReadBpsDevice:   readBpsDevice,
-		BlkioWriteBpsDevice:  writeBpsDevice,
-		BlkioReadIOpsDevice:  readIOpsDevice,
-		BlkioWriteIOpsDevice: writeIOpsDevice,
+		writeIOpsDevice := cgroupEnabled(mountPoint, "blkio.throttle.write_iops_device")
+		if !quiet && !writeIOpsDevice {
+			logrus.Warn("Your kernel does not support cgroup blkio throttle.write_iops_device")
+		}
+		return cgroupBlkioInfo{
+			BlkioWeight:          weight,
+			BlkioWeightDevice:    weightDevice,
+			BlkioReadBpsDevice:   readBpsDevice,
+			BlkioWriteBpsDevice:  writeBpsDevice,
+			BlkioReadIOpsDevice:  readIOpsDevice,
+			BlkioWriteIOpsDevice: writeIOpsDevice,
+		}
+	} else {
+		weight := true // it is the default weight setting
+		if !quiet && !weight {
+			logrus.Warn("Your kernel does not support cgroup blkio weight")
+		}
+
+		weightDevice := true // use io.max
+		if !quiet && !weightDevice {
+			logrus.Warn("Your kernel does not support cgroup blkio weight_device")
+		}
+
+		readBpsDevice := true // use io.max
+		if !quiet && !readBpsDevice {
+			logrus.Warn("Your kernel does not support cgroup blkio throttle.read_bps_device")
+		}
+
+		writeBpsDevice := true // use io.max
+		if !quiet && !writeBpsDevice {
+			logrus.Warn("Your kernel does not support cgroup blkio throttle.write_bps_device")
+		}
+		readIOpsDevice := true // use io.max
+		if !quiet && !readIOpsDevice {
+			logrus.Warn("Your kernel does not support cgroup blkio throttle.read_iops_device")
+		}
+
+		writeIOpsDevice := true // use io.max
+		if !quiet && !writeIOpsDevice {
+			logrus.Warn("Your kernel does not support cgroup blkio throttle.write_iops_device")
+		}
+		return cgroupBlkioInfo{
+			BlkioWeight:          weight,
+			BlkioWeightDevice:    weightDevice,
+			BlkioReadBpsDevice:   readBpsDevice,
+			BlkioWriteBpsDevice:  writeBpsDevice,
+			BlkioReadIOpsDevice:  readIOpsDevice,
+			BlkioWriteIOpsDevice: writeIOpsDevice,
+		}
 	}
 }
 
