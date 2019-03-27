@@ -31,6 +31,10 @@ COPY --from=golang /usr/local/go /usr/local/go
 COPY --from=engine /bin/dockerd /source/
 COPY --from=engine /bin/docker-proxy /source/
 COPY --from=engine /bin/docker-init /source/
+COPY --from=engine /bin/containerd /source/
+COPY --from=engine /bin/containerd-shim /source/
+COPY --from=engine /bin/ctr /source/
+COPY --from=engine /bin/runc /source/
 
 WORKDIR /root/build-deb
 COPY build-deb /root/build-deb/build-deb

@@ -4,6 +4,9 @@ FROM ${GO_IMAGE} as builder
 
 COPY hack/dockerfile/install/tini.installer /
 COPY hack/dockerfile/install/proxy.installer /
+# noted by yew: add runc & containerd installer, we are going to extract the definations
+COPY hack/dockerfile/install/runc.installer /
+COPY hack/dockerfile/install/containerd.installer /
 RUN apt-get update && apt-get install -y \
     bash \
     btrfs-tools \
@@ -17,7 +20,8 @@ RUN apt-get update && apt-get install -y \
     libseccomp-dev \
     libtool \
     make
-RUN grep "_COMMIT=" /*.installer  |cut -f2- -d: > /binaries-commits
+# noted by yew: include *_GIT=    
+RUN grep "_COMMIT=\|_GIT=" /*.installer  |cut -f2- -d: > /binaries-commits
 
 # dockerd
 FROM builder as dockerd-builder
@@ -69,11 +73,22 @@ RUN . /binaries-commits && \
 # runc
 FROM builder as runc-builder
 RUN apt-get install -y libseccomp-dev
-RUN git clone https://github.com/opencontainers/runc.git /go/src/github.com/opencontainers/runc
+RUN . /binaries-commits && \
+    git clone $RUNC_GIT /go/src/github.com/opencontainers/runc
 WORKDIR /go/src/github.com/opencontainers/runc
 RUN . /binaries-commits && \
     git checkout -q "$RUNC_COMMIT" && \
     make BUILDTAGS='seccomp apparmor' static && make install
+
+# containerd
+FROM builder as containerd-builder
+RUN apt-get install -y libseccomp-dev
+RUN . /binaries-commits && \
+    git clone $CONTAINERD_GIT /go/src/github.com/containerd/containerd
+WORKDIR /go/src/github.com/containerd/containerd
+RUN . /binaries-commits && \
+    git checkout -q "$CONTAINERD_COMMIT" && \
+    make BUILDTAGS='netgo osusergo static_build' && make install
 
 # Final docker image
 FROM scratch
@@ -86,6 +101,9 @@ COPY --from=dockerd-builder /sbin/dockerd /bin/
 COPY --from=proxy-builder /sbin/docker-proxy /bin/
 COPY --from=init-builder /sbin/docker-init /bin/
 COPY --from=runc-builder /usr/local/sbin/runc /bin/
+COPY --from=containerd-builder /usr/local/bin/containerd /bin/
+COPY --from=containerd-builder /usr/local/bin/containerd-shim /bin/
+COPY --from=containerd-builder /usr/local/bin/ctr /bin/
 
 LABEL \
     org.opencontainers.image.authors="Docker Inc." \

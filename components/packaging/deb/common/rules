@@ -16,9 +16,9 @@ override_dh_strip:
 
 override_dh_auto_install:
 	# docker-ce-cli install
-	install -D -m 0644 /go/src/github.com/docker/cli/contrib/completion/fish/docker.fish debian/docker-ce-cli/usr/share/fish/vendor_completions.d/docker.fish
-	install -D -m 0644 /go/src/github.com/docker/cli/contrib/completion/zsh/_docker debian/docker-ce-cli/usr/share/zsh/vendor-completions/_docker
-	install -D -m 0755 /go/src/github.com/docker/cli/build/docker debian/docker-ce-cli/usr/bin/docker
+	install -D -m 0644 /go/src/github.com/docker/cli/contrib/completion/fish/docker.fish debian/docker-ce/usr/share/fish/vendor_completions.d/docker.fish
+	install -D -m 0644 /go/src/github.com/docker/cli/contrib/completion/zsh/_docker debian/docker-ce/usr/share/zsh/vendor-completions/_docker
+	install -D -m 0755 /go/src/github.com/docker/cli/build/docker debian/docker-ce/usr/bin/docker
 	# docker-ce install
 	install -D -m 0644 /sources/docker.service debian/docker-ce/lib/systemd/system/docker.service
 	install -D -m 0644 /sources/docker.socket debian/docker-ce/lib/systemd/system/docker.socket
@@ -26,6 +26,12 @@ override_dh_auto_install:
 	install -D -m 0755 /source/docker-proxy debian/docker-ce/usr/bin/docker-proxy
 	install -D -m 0755 /source/docker-init debian/docker-ce/usr/bin/docker-init
 	install -D -m 0644 /sources/distribution_based_engine.json debian/docker-ce/var/lib/docker-engine/distribution_based_engine-ce.json
+	# containerd.io install
+	install -D -m 0644 /sources/containerd.service debian/docker-ce/lib/systemd/system/containerd.service
+	install -D -m 0755 /source/containerd debian/docker-ce/usr/bin/containerd
+	install -D -m 0755 /source/containerd-shim debian/docker-ce/usr/bin/containerd-shim
+	install -D -m 0755 /source/ctr debian/docker-ce/usr/bin/ctr
+	install -D -m 0755 /source/runc debian/docker-ce/usr/sbin/runc
 
 override_dh_installinit:
 	# use "docker" as our service name, not "docker-ce"
