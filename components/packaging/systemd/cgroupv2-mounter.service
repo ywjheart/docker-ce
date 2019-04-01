@@ -1,0 +1,10 @@
+[Unit]
+Description=cgroupv2 mounter
+Before=lxcfs
+
+[Service]
+ExecStart=/lib/systemd/cgroupv2-mounter start
+Type=oneshot
+
+[Install]
+WantedBy=multi-user.target

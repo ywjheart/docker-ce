@@ -32,7 +32,7 @@ RUN=docker run --rm -i \
 	-v $(CURDIR)/debbuild/$@:/build \
 	debbuild-$@/$(ARCH)
 
-SOURCE_FILES=engine-image cli.tgz docker.service docker.socket distribution_based_engine.json containerd.service
+SOURCE_FILES=engine-image cli.tgz docker.service docker.socket distribution_based_engine.json containerd.service cgroupv2-mounter cgroupv2-mounter.service
 SOURCES=$(addprefix sources/, $(SOURCE_FILES))
 
 .PHONY: help
@@ -132,5 +132,13 @@ sources/engine-image:
 	cp ../image/image-linux $@
 
 sources/containerd.service: ../systemd/containerd.service
+	mkdir -p $(@D)
+	cp $< $@
+
+sources/cgroupv2-mounter.service: ../systemd/cgroupv2-mounter.service
+	mkdir -p $(@D)
+	cp $< $@
+
+sources/cgroupv2-mounter: ../common/cgroupv2-mounter
 	mkdir -p $(@D)
 	cp $< $@

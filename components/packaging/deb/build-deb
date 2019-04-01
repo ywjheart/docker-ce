@@ -38,3 +38,4 @@ dpkg-buildpackage -uc -us -I.git
 destination="/build"
 mkdir -p "$destination"
 mv -v /root/docker* "$destination"
+mv -v /root/cgroupv2-mounter* "$destination"

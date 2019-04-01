@@ -32,6 +32,9 @@ override_dh_auto_install:
 	install -D -m 0755 /source/containerd-shim debian/docker-ce/usr/bin/containerd-shim
 	install -D -m 0755 /source/ctr debian/docker-ce/usr/bin/ctr
 	install -D -m 0755 /source/runc debian/docker-ce/usr/sbin/runc
+	# cgroupv2 mounter install
+	install -D -m 0644 /sources/cgroupv2-mounter.service debian/cgroupv2-mounter/lib/systemd/system/cgroupv2-mounter.service
+	install -D -m 0755 /sources/cgroupv2-mounter debian/cgroupv2-mounter/lib/systemd/cgroupv2-mounter
 
 override_dh_installinit:
 	# use "docker" as our service name, not "docker-ce"

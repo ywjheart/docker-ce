@@ -37,3 +37,10 @@ Description: Docker: the open-source application container engine
  language, framework or packaging system. That makes them great building blocks
  for deploying and scaling web apps, databases, and backend services without
  depending on a particular stack or provider.
+
+
+Package: cgroupv2-mounter
+Architecture: linux-any
+Description: cgroupv2 mounter
+ .
+ cgroupv2 mounter mounts cgroupv2 to /sys/fs/cgroup/unified.

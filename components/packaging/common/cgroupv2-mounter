@@ -1,0 +1,28 @@
+#!/bin/bash
+
+case "$1" in 
+start)
+   if [ ! -d /sys/fs/cgroup/unified ]; then
+   mount -o rw,remount /sys/fs/cgroup
+   mkdir /sys/fs/cgroup/unified
+   mount -o ro,remount /sys/fs/cgroup
+   mount -t cgroup2 none /sys/fs/cgroup/unified
+   fi
+   echo "+memory +io" > /sys/fs/cgroup/unified/cgroup.subtree_control
+   ;;
+stop)
+   
+   ;;
+restart)
+
+   ;;
+status)
+   cat /proc/self/mountinfo | grep cgroup
+   ;;
+*)
+   echo "Usage: $0 {start|stop|status|restart}"
+esac
+
+exit 0 
+
+
