@@ -8,7 +8,7 @@ start)
    mount -o ro,remount /sys/fs/cgroup
    mount -t cgroup2 none /sys/fs/cgroup/unified
    fi
-   echo "+memory +io" > /sys/fs/cgroup/unified/cgroup.subtree_control
+   #echo "+memory +io" > /sys/fs/cgroup/unified/cgroup.subtree_control
    ;;
 stop)
    
