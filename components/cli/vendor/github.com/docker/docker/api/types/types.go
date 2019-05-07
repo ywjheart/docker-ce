@@ -385,6 +385,7 @@ type NetworkSettingsBase struct {
 	SandboxKey             string      // SandboxKey identifies the sandbox
 	SecondaryIPAddresses   []network.Address
 	SecondaryIPv6Addresses []network.Address
+	DSCP                   int         // dscp, default to 0
 }
 
 // DefaultNetworkSettings holds network information

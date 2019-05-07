@@ -335,6 +335,7 @@ type Resources struct {
 	OomKillDisable       *bool           // Whether to disable OOM Killer or not
 	PidsLimit            int64           // Setting pids limit for a container
 	Ulimits              []*units.Ulimit // List of ulimits to be set in the container
+	DSCP                 uint32 // dscp of container traffic
 
 	// Applicable to Windows
 	CPUCount           int64  `json:"CpuCount"`   // CPU count

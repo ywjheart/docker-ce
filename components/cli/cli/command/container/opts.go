@@ -100,6 +100,7 @@ type containerOptions struct {
 	ipv6Address        string
 	ipcMode            string
 	pidsLimit          int64
+	dscp               uint32
 	restartPolicy      string
 	readonlyRootfs     bool
 	loggingDriver      string
@@ -271,6 +272,7 @@ func addFlags(flags *pflag.FlagSet) *containerOptions {
 	flags.BoolVar(&copts.oomKillDisable, "oom-kill-disable", false, "Disable OOM Killer")
 	flags.IntVar(&copts.oomScoreAdj, "oom-score-adj", 0, "Tune host's OOM preferences (-1000 to 1000)")
 	flags.Int64Var(&copts.pidsLimit, "pids-limit", 0, "Tune container pids limit (set -1 for unlimited)")
+	flags.Uint32Var(&copts.dscp, "dscp", 0, "network DSCP setting, in decimal, or 0 to disable (default 0)")
 
 	// Low-level execution (cgroups, namespaces, ...)
 	flags.StringVar(&copts.cgroupParent, "cgroup-parent", "", "Optional parent cgroup for the container")
@@ -542,6 +544,7 @@ func parse(flags *pflag.FlagSet, copts *containerOptions) (*containerConfig, err
 		Ulimits:              copts.ulimits.GetList(),
 		DeviceCgroupRules:    copts.deviceCgroupRules.GetAll(),
 		Devices:              deviceMappings,
+		DSCP:                 copts.dscp,
 	}
 
 	config := &container.Config{

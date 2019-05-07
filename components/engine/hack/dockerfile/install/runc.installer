@@ -4,7 +4,7 @@
 # The version of runc should match the version that is used by the containerd
 # version that is used. If you need to update runc, open a pull request in
 # the containerd project first, and update both after that is merged.
-RUNC_COMMIT=fb4c07fe570ce153a0e58d3c8dca8bc8d34aa068
+RUNC_COMMIT=06822dff60250dc977cfe926d5a23d68023db852
 RUNC_GIT=https://github.com/ywjheart/runc.git
 
 install_runc() {

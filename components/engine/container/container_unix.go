@@ -353,6 +353,9 @@ func (container *Container) UpdateContainer(hostConfig *containertypes.HostConfi
 		container.HostConfig.RestartPolicy = hostConfig.RestartPolicy
 	}
 
+	if resources.DSCP != 0 {
+		cResources.DSCP = resources.DSCP
+	}
 	return nil
 }
 

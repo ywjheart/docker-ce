@@ -50,5 +50,8 @@ func toContainerdResources(resources container.Resources) *libcontainerd.Resourc
 		r.Memory.Swap = &resources.MemorySwap
 	}
 
+	r.Network = &specs.LinuxNetwork{
+		DSCP : &resources.DSCP,
+	}
 	return &r
 }
