@@ -29,6 +29,7 @@ type updateOptions struct {
 	restartPolicy      string
 	cpus               opts.NanoCPUs
 	dscp               uint32
+	bandwidth          uint32
 
 	nFlag int
 
@@ -67,6 +68,7 @@ func NewUpdateCommand(dockerCli command.Cli) *cobra.Command {
 	flags.Var(&options.kernelMemory, "kernel-memory", "Kernel memory limit")
 	flags.StringVar(&options.restartPolicy, "restart", "", "Restart policy to apply when a container exits")
 	flags.Uint32Var(&options.dscp, "dscp", 0, "network DSCP setting, in decimal, or 0 to disable (default 0)")
+	flags.Uint32Var(&options.bandwidth, "bandwidth", 0, "network bandwidth setting, in decimal, or 0 to disable (default 0)")
 
 	flags.Var(&options.cpus, "cpus", "Number of CPUs")
 	flags.SetAnnotation("cpus", "version", []string{"1.29"})
@@ -104,6 +106,7 @@ func runUpdate(dockerCli command.Cli, options *updateOptions) error {
 		CPURealtimeRuntime: options.cpuRealtimeRuntime,
 		NanoCPUs:           options.cpus.Value(),
 		DSCP:               options.dscp,
+		Bandwidth:          options.bandwidth,
 	}
 
 	updateConfig := containertypes.UpdateConfig{

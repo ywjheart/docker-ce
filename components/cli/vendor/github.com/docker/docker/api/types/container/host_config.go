@@ -336,6 +336,7 @@ type Resources struct {
 	PidsLimit            int64           // Setting pids limit for a container
 	Ulimits              []*units.Ulimit // List of ulimits to be set in the container
 	DSCP                 uint32 // dscp of container traffic
+	Bandwidth            uint32 // bandwidth setting of container traffic
 
 	// Applicable to Windows
 	CPUCount           int64  `json:"CpuCount"`   // CPU count

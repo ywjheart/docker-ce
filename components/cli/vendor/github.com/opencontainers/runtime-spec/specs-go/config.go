@@ -320,6 +320,8 @@ type LinuxNetwork struct {
 	Priorities []LinuxInterfacePriority `json:"priorities,omitempty"`
 	// Set DSCP
 	DSCP  *uint32 `json:"dscp,omitempty"`
+	// Set bandwidth
+	Bandwidth  *uint32 `json:"bandwidth,omitempty"`
 }
 
 // LinuxResources has container runtime resource constraints

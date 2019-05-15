@@ -52,6 +52,7 @@ func toContainerdResources(resources container.Resources) *libcontainerd.Resourc
 
 	r.Network = &specs.LinuxNetwork{
 		DSCP : &resources.DSCP,
+		Bandwidth : &resources.Bandwidth,
 	}
 	return &r
 }

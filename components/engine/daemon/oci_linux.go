@@ -56,6 +56,7 @@ func setResources(s *specs.Spec, r containertypes.Resources) error {
 	}
 	blkioWeight := r.BlkioWeight
 	dscp := r.DSCP
+	bandwidth := r.Bandwidth
 
 	specResources := &specs.LinuxResources{
 		Memory: memoryRes,
@@ -73,6 +74,7 @@ func setResources(s *specs.Spec, r containertypes.Resources) error {
 		},
 		Network: &specs.LinuxNetwork{
 			DSCP: &dscp,
+			Bandwidth: &bandwidth,
 		},
 	}
 

@@ -356,6 +356,9 @@ func (container *Container) UpdateContainer(hostConfig *containertypes.HostConfi
 	if resources.DSCP != 0 {
 		cResources.DSCP = resources.DSCP
 	}
+	if resources.Bandwidth != 0 {
+		cResources.Bandwidth = resources.Bandwidth
+	}
 	return nil
 }
 
