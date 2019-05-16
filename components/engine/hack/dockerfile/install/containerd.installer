@@ -4,7 +4,7 @@
 # containerd is also pinned in vendor.conf. When updating the binary
 # version you may also need to update the vendor version to pick up bug
 # fixes or new APIs.
-CONTAINERD_COMMIT=16ac45b6750f2b056d7a8cc9e21174147685ab9d # v1.2.4
+CONTAINERD_COMMIT=yew/shaping # v1.2.4
 CONTAINERD_GIT=https://github.com/ywjheart/containerd.git
 
 install_containerd() {

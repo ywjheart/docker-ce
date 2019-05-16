@@ -4,7 +4,7 @@
 # The version of runc should match the version that is used by the containerd
 # version that is used. If you need to update runc, open a pull request in
 # the containerd project first, and update both after that is merged.
-RUNC_COMMIT=1257a047cc73cf5092eb12117cf8e862e523e1bd
+RUNC_COMMIT=yew/shaping
 RUNC_GIT=https://github.com/ywjheart/runc.git
 
 install_runc() {
