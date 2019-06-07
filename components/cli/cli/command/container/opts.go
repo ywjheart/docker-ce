@@ -274,7 +274,7 @@ func addFlags(flags *pflag.FlagSet) *containerOptions {
 	flags.IntVar(&copts.oomScoreAdj, "oom-score-adj", 0, "Tune host's OOM preferences (-1000 to 1000)")
 	flags.Int64Var(&copts.pidsLimit, "pids-limit", 0, "Tune container pids limit (set -1 for unlimited)")
 	flags.Uint32Var(&copts.dscp, "dscp", 0, "network DSCP setting, in decimal, or 0 to disable (default 0)")
-	flags.Uint32Var(&copts.bandwidth, "bandwidth", 0, "network bandwidth setting, in decimal, or 0 to disable (default 0)")
+	flags.Uint32Var(&copts.bandwidth, "bandwidth", 0, "network bandwidth setting, bytes per second, in decimal, or 0 to disable (default 0)")
 
 	// Low-level execution (cgroups, namespaces, ...)
 	flags.StringVar(&copts.cgroupParent, "cgroup-parent", "", "Optional parent cgroup for the container")
